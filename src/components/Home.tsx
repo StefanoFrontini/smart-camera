@@ -4,13 +4,11 @@ import * as cocoSsd from "@tensorflow-models/coco-ssd";
 function getUserMediaSupported() {
   return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 }
-function Box({
-  bbox,
-  class: objName,
-  score,
-  videoOffset,
-  isMobile,
-}: cocoSsd.DetectedObject) {
+interface BoxProps extends cocoSsd.DetectedObject {
+  videoOffset: number[];
+  isMobile: boolean;
+}
+function Box({ bbox, class: objName, score, videoOffset, isMobile }: BoxProps) {
   return (
     <>
       <p
