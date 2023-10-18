@@ -18,29 +18,29 @@ body {
   font-weight: 400;
   text-align: center;
   /* background: darkgray; */
-  margin: 2em;
+  /* margin: 2em; */
   color: #3d3d3d;
 }
-
-/* #canvas {
-  margin-top: 5rem;
-  background-color: lightgray;
-} */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+}
 
 h1 {
   font-style: italic;
   color: #ff6f00;
-}
-
-video {
-  display: block;
+  font-size: 1.7rem;
 }
 
 section {
   opacity: 1;
   transition: opacity 500ms ease-in-out;
 }
-
+.video {
+  margin: 0 auto;
+  display: block;
+}
 .removed {
   display: none;
 }
@@ -51,10 +51,11 @@ section {
 
 .camView {
   position: relative;
-  float: left;
-  width: calc(100% - 20px);
-  margin: 10px;
-  cursor: pointer;
+  /* float: left; */
+  /* width: calc(100% - 20px); */
+  width: 100%;
+  /* margin: 10px; */
+  /* cursor: pointer; */
 }
 
 .camView p {
@@ -63,7 +64,7 @@ section {
   color: #fff;
   border: 1px dashed rgba(255, 255, 255, 0.7);
   z-index: 2;
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .highlighter {
@@ -71,4 +72,20 @@ section {
   border: 1px dashed #fff;
   z-index: 1;
   position: absolute;
+}
+
+.webcamButton {
+  background: rgba(255, 111, 0, 1);
+  border: none;
+  border-radius: 5px;
+  color: rgba(255, 255, 255, 1);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin: 1rem;
+}
+.webcamButton:hover {
+  background: rgba(255, 111, 0, 0.85);
 }

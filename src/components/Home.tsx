@@ -4,14 +4,22 @@ import * as cocoSsd from "@tensorflow-models/coco-ssd";
 function getUserMediaSupported() {
   return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 }
-function Box({ bbox, class: objName, score }: cocoSsd.DetectedObject) {
+function Box({
+  bbox,
+  class: objName,
+  score,
+  videoOffset,
+  isMobile,
+}: cocoSsd.DetectedObject) {
   return (
     <>
       <p
         style={{
-          left: bbox[0],
-          top: bbox[1],
-          width: bbox[2],
+          marginLeft: `${bbox[0] + videoOffset[0]}px`,
+          marginTop: `${bbox[1]}px`,
+          width: isMobile ? `${bbox[2] / 2}px` : `${bbox[2]}px`,
+          top: 0,
+          left: 0,
         }}
       >
         {`${objName} - with ${Math.round(Number(score) * 100)}% confidence`}
@@ -19,10 +27,10 @@ function Box({ bbox, class: objName, score }: cocoSsd.DetectedObject) {
       <div
         className="highlighter"
         style={{
-          left: bbox[0],
-          top: bbox[1],
-          width: bbox[2],
-          height: bbox[3],
+          left: `${bbox[0] + videoOffset[0]}px`,
+          top: `${bbox[1]}px`,
+          width: isMobile ? `${bbox[2] / 2}px` : `${bbox[2]}px`,
+          height: isMobile ? `${bbox[3] / 2}px` : `${bbox[3]}px`,
         }}
       ></div>
     </>
@@ -33,6 +41,8 @@ function Home() {
   const [model, setModel] = useState<cocoSsd.ObjectDetection | null>(null);
   const [predictions, setPredictions] = useState<cocoSsd.DetectedObject[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [videoOffset, setVideoOffset] = useState([0, 0]);
+  const [isMobile, setIsMobile] = useState(false);
   function enableCam(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     if (!getUserMediaSupported()) {
@@ -42,7 +52,7 @@ function Home() {
     if (!model) return;
 
     const constraints = {
-      video: { facingMode: { exact: "environment" } },
+      video: { facingMode: "environment" },
     };
 
     const activateStream = async () => {
@@ -57,12 +67,27 @@ function Home() {
         });
       };
       await onMetaDataLoaded();
-      videoRef.current.play();
+      //   videoRef.current.play();
       setIsStreaming(true);
     };
 
     activateStream();
   }
+  useEffect(() => {
+    function isMobile() {
+      if (window.innerWidth < 768) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      isMobile();
+    });
+    isMobile();
+    return () => removeEventListener("resize", isMobile);
+  }, []);
 
   useEffect(() => {
     const getCocoSsdModel = async () => {
@@ -82,6 +107,8 @@ function Home() {
     const getPredictions = async () => {
       if (!videoRef.current) return;
       const video = videoRef.current;
+      const rect = video.getBoundingClientRect();
+      setVideoOffset([rect.left, rect.top]);
       const predictions = await model.detect(video);
       setPredictions(predictions);
       animationFrameId = requestAnimationFrame(getPredictions);
@@ -90,47 +117,49 @@ function Home() {
     return () => cancelAnimationFrame(animationFrameId);
   }, [model, isStreaming]);
 
+  //   console.log("predictions", predictions);
+
   return (
-    <>
+    <div className="container">
       <h1>
-        Multiple object detection using pre trained model in TensorFlow.js
+        Multiple object detection using TensorFlow.js and coco-ssd pre trained
+        model.
       </h1>
 
-      <p>
-        Wait for the model to load before clicking the button to enable the
-        webcam - at which point it will become visible to use.
-      </p>
-
-      <section className={model ? "" : "invisible"}>
-        <p>
-          Hold some objects up close to your webcam to get a real-time
-          classification! When ready click "enable webcam" below and accept
-          access to the webcam when the browser asks (check the top left of your
-          window)
-        </p>
+      <section className={model ? "" : "invisible "}>
         <div className="camView">
-          <button id="webcamButton" onClick={enableCam}>
+          <button className="webcamButton" onClick={enableCam}>
             Enable Webcam
           </button>
           <video
+            className="video"
             ref={videoRef}
             id="webcam"
             playsInline={true}
             muted={true}
             autoPlay={true}
             // autoPlay
-            width="640"
-            height="480"
+            width={isMobile ? 320 : 640}
+            height={isMobile ? 240 : 480}
+            // width="640"
+            // height="480"
           ></video>
           {predictions.length > 0 &&
             predictions.map((prediction) => {
               if (prediction.score > 0.66) {
-                return <Box key={prediction.score} {...prediction} />;
+                return (
+                  <Box
+                    key={prediction.score}
+                    {...prediction}
+                    videoOffset={videoOffset}
+                    isMobile={isMobile}
+                  />
+                );
               }
             })}
         </div>
       </section>
-    </>
+    </div>
   );
 }
 
