@@ -6,7 +6,7 @@ const manifestForPlugin = {
   name: "Smart Camera",
   short_name: "Smart Camera",
   description: "Smart Camera",
-  display: "browser",
+  display: "standalone",
   scope: "/",
   permissions: {
     "video-capture": {
