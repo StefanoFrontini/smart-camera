@@ -42,7 +42,7 @@ function Home() {
     if (!model) return;
 
     const constraints = {
-      video: { facingMode: "environment" },
+      video: { facingMode: { exact: "environment" } },
     };
 
     const activateStream = async () => {
@@ -50,7 +50,6 @@ function Home() {
 
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       videoRef.current.srcObject = stream;
-      videoRef.current.play();
       const onMetaDataLoaded = (): Promise<void> => {
         return new Promise((resolve) => {
           if (!videoRef.current) return;
@@ -58,6 +57,7 @@ function Home() {
         });
       };
       await onMetaDataLoaded();
+      videoRef.current.play();
       setIsStreaming(true);
     };
 
@@ -115,7 +115,7 @@ function Home() {
           <video
             ref={videoRef}
             id="webcam"
-            autoPlay
+            // autoPlay
             width="640"
             height="480"
           ></video>
