@@ -115,6 +115,9 @@ function Home() {
           <video
             ref={videoRef}
             id="webcam"
+            playsInline={true}
+            muted={true}
+            autoPlay={true}
             // autoPlay
             width="640"
             height="480"
