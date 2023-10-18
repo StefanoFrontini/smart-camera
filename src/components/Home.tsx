@@ -42,7 +42,7 @@ function Home() {
     if (!model) return;
 
     const constraints = {
-      video: true,
+      video: { facingMode: "environment" },
     };
 
     const activateStream = async () => {
