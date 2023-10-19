@@ -50,7 +50,11 @@ function Home() {
     if (!model) return;
 
     const constraints = {
-      video: { facingMode: "environment" },
+      video: {
+        facingMode: "environment",
+        width: isMobile ? 320 : 640,
+        height: isMobile ? 240 : 480,
+      },
     };
 
     const activateStream = async () => {
