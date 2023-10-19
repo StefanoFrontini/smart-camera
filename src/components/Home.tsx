@@ -15,7 +15,7 @@ function Box({ bbox, class: objName, score, videoOffset, isMobile }: BoxProps) {
         style={{
           marginLeft: `${bbox[0] + videoOffset[0]}px`,
           marginTop: `${bbox[1]}px`,
-          width: isMobile ? `${bbox[2] / 2}px` : `${bbox[2]}px`,
+          width: isMobile ? `${bbox[2]}px` : `${bbox[2]}px`,
           top: 0,
           left: 0,
         }}
@@ -27,8 +27,8 @@ function Box({ bbox, class: objName, score, videoOffset, isMobile }: BoxProps) {
         style={{
           left: `${bbox[0] + videoOffset[0]}px`,
           top: `${bbox[1]}px`,
-          width: isMobile ? `${bbox[2] / 2}px` : `${bbox[2]}px`,
-          height: isMobile ? `${bbox[3] / 2}px` : `${bbox[3]}px`,
+          width: isMobile ? `${bbox[2]}px` : `${bbox[2]}px`,
+          height: isMobile ? `${bbox[3]}px` : `${bbox[3]}px`,
         }}
       ></div>
     </>
@@ -135,14 +135,18 @@ function Home() {
           </button>
           <video
             className="video"
+            style={{
+              width: isMobile ? "640px" : "640px",
+              height: isMobile ? "480px" : "480px",
+            }}
             ref={videoRef}
             id="webcam"
             playsInline={true}
             muted={true}
             autoPlay={true}
             // autoPlay
-            width={isMobile ? 320 : 640}
-            height={isMobile ? 240 : 480}
+            // width={isMobile ? 320 : 640}
+            // height={isMobile ? 240 : 480}
             // width="640"
             // height="480"
           ></video>

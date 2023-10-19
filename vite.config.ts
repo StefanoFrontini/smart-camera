@@ -8,6 +8,7 @@ const manifestForPlugin = {
   description: "Smart Camera",
   display: "standalone",
   scope: "/",
+  orientation: "landscape",
   permissions: {
     "video-capture": {
       description: "Required to capture video using getUserMedia()",
