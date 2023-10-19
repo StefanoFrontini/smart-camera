@@ -129,10 +129,10 @@ function Home() {
       </h1>
 
       <section className={model ? "" : "invisible "}>
+        <button className="webcamButton" onClick={enableCam}>
+          Enable Webcam
+        </button>
         <div className="camView">
-          <button className="webcamButton" onClick={enableCam}>
-            Enable Webcam
-          </button>
           <video
             className="video"
             style={{
