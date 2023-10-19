@@ -52,8 +52,8 @@ function Home() {
     const constraints = {
       video: {
         facingMode: "environment",
-        width: isMobile ? 320 : 640,
-        height: isMobile ? 240 : 480,
+        // width: isMobile ? 320 : 640,
+        // height: isMobile ? 240 : 480,
       },
     };
 
